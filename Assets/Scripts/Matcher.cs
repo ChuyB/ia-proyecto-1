@@ -28,7 +28,7 @@ public class Matcher : Static
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         align.character = this;
         align.target = target;

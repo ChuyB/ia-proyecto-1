@@ -25,7 +25,7 @@ public class Wanderer : Static
     public float wanderOrientation;
     public float maxAcceleration;
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         GameObject obj = new GameObject();
         Static invisibleTarget = obj.AddComponent<Static>();
@@ -39,7 +39,7 @@ public class Wanderer : Static
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (isKinematic)
         {

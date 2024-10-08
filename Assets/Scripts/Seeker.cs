@@ -22,6 +22,7 @@ public class Seeker : Static
     public float maxAcceleration;
     public float targetRadius;
     public float slowRadius;
+    public float maxDistance;
 
     public bool isKinematicArrive;
     public bool isKinematic;
@@ -74,7 +75,10 @@ public class Seeker : Static
 
             if (isFleeing)
             {
-                transform.position -= new Vector3(kinematicSteeringOutput.velocity.x * Time.deltaTime, kinematicSteeringOutput.velocity.y * Time.deltaTime);
+                if ((transform.position - target.transform.position).magnitude < maxDistance)
+                {
+                    transform.position -= new Vector3(kinematicSteeringOutput.velocity.x * Time.deltaTime, kinematicSteeringOutput.velocity.y * Time.deltaTime);
+                }
             }
             else
             {
@@ -93,11 +97,24 @@ public class Seeker : Static
                 seekSteeringOutput = seek.getSteering();
             }
 
-            transform.position += new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0);
+            if (isFleeing && (transform.position - target.transform.position).magnitude >= maxDistance)
+            {
+                transform.position = transform.position;
+            } else
+            {
+                transform.position += new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0);
+            }
+
 
             if (isFleeing)
             {
-                velocity -= seekSteeringOutput.linear * Time.deltaTime;
+                if ((transform.position - target.transform.position).magnitude < maxDistance)
+                {
+                    velocity -= seekSteeringOutput.linear * Time.deltaTime;
+                } else
+                {
+                    velocity = Vector2.zero;
+                }
             } else
             {
                 velocity += seekSteeringOutput.linear * Time.deltaTime;

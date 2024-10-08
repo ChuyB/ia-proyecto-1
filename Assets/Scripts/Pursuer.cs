@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Pursuer : Static
@@ -19,6 +18,7 @@ public class Pursuer : Static
     public float maxAngularAcceleration;
     public float maxRotation;
     public bool isEvade;
+    public float maxDistance;
 
     // Start is called before the first frame update
     void Start()
@@ -52,10 +52,16 @@ public class Pursuer : Static
         transform.position += new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0);
         
         if (steeringOutput != null)
-            {
+        {
             if (isEvade)
             {
-                velocity -= steeringOutput.linear * Time.deltaTime;
+                if ((transform.position - target.transform.position).magnitude < maxDistance)
+                {
+                    velocity -= steeringOutput.linear * Time.deltaTime;
+                } else
+                {
+                    velocity = Vector2.zero;
+                }
             }
             else
             {
